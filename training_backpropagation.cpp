@@ -24,7 +24,7 @@ int  main(){
     static const int numInputs = 1200;    
 
     //  number of hidden layer = 32
-    static const int numHiddenNodes = 32;    
+    static const int numHiddenNodes = 16;    
     float z[numHiddenNodes];
 
     //  number of output = 2
@@ -85,7 +85,7 @@ int  main(){
         // Each input unit (Xi, i = 1, ... , n) receives
         // input signal Xi and broadcasts this signal to all
         // units in the layer above (the hidden units).
-        for (size_t pola = 0; pola < 10; pola++)
+        for (size_t pola = 0; pola < 2; pola++)
         {
             
             // STEP 4============================================
@@ -212,11 +212,11 @@ int  main(){
             }
             
             array_of_target++;
-            if (pola <4 )
+            if (pola <0 )
             {
                 array_of_target = 0;
             } 
-            if (pola > 4 && pola <=9)
+            if (pola >1)
             {
                 array_of_target = 1;
             } 

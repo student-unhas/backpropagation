@@ -11,7 +11,7 @@ int main(){
     static const char huruf[2] = {'A', 'B'};
     int array_of_target = 0; 
 
-    for (size_t pola = 0; pola < 10; pola++)
+    for (size_t pola = 0; pola < 2; pola++)
         {
            
             // STEP 4============================================
@@ -56,11 +56,11 @@ int main(){
            
             array_of_target++;
 
-            if (pola <4 )
+           if (pola <0 )
             {
                 array_of_target = 0;
             } 
-            if (pola > 4 && pola <=9)
+            if (pola >1)
             {
                 array_of_target = 1;
             } 
