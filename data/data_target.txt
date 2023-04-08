@@ -1,4 +1,4 @@
-int target[2][2] = {
+int data_target[2][2] = {
     // TARGET 1,  GAMBAR KUCING
     {1, 0,},
     // TARGET 2 GAMBAR KELINCI

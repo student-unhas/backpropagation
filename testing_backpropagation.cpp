@@ -1,17 +1,17 @@
 #include <stdio.h>
 
 // Eksternal file
-#include "data/data_training.txt"
+#include "data/data_training_testing_clara.txt"
 #include "data/data_wb_backpropagation.txt"
 
 
 int main(){
 
     // char huruf[7] = {'A', 'B', 'C', 'D', 'E', 'J', 'K'};
-    static const char huruf[2] = {'C', 'R'};
+    static const char huruf[2] = {'A', 'B'};
     int array_of_target = 0; 
 
-    for (size_t pola = 0; pola < 20; pola++)
+    for (size_t pola = 0; pola < 10; pola++)
         {
            
             // STEP 4============================================
@@ -19,7 +19,7 @@ int main(){
             for (size_t j = 0; j < numHiddenNodes; j++)
             {
                 float total = 0;
-                for (size_t i = 0; i < 1600; i++)
+                for (size_t i = 0; i < 1200; i++)
                 {
                     total = total + (x[pola][i] * weight_v[i][j] );
                 }
@@ -48,21 +48,27 @@ int main(){
                 y[k] = reluCostum(y_in);
             }  
 
+// int x[20][1200] = 
 
             // printf( "\n\nPola ke - %d huruf %c\t\n",pola+1, huruf[array_of_target]);
             printf( "\n\nPola ke - %lu huruf %c\t\n",pola+1, huruf[array_of_target]);
+        //    printf("%c", huruf[array_of_target]);
+           
             array_of_target++;
-             if (pola < 9)
+
+            if (pola <4 )
             {
                 array_of_target = 0;
             } 
-            if (pola > 9 && pola <= 19)
+            if (pola > 4 && pola <=9)
             {
                 array_of_target = 1;
             } 
+            
             printf("\t(\t");
             for (size_t k = 0; k < 2; k++)
             {
+
                 printf("%d,\t",  y[k]);
             }
             

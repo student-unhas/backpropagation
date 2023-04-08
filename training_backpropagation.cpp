@@ -18,13 +18,13 @@ float init_weight() { return ((float)rand())/((float)RAND_MAX); }
 
 int  main(){
     // static const char huruf[7] = {'A', 'B', 'C', 'D', 'E', 'J', 'K'};
-    static const char huruf[2] = {'C', 'R'};
+    static const char huruf[2] = {'A', 'B'};
 
     //  number of input  = 1600
-    static const int numInputs = 1600;    
+    static const int numInputs = 1200;    
 
     //  number of hidden layer = 32
-    static const int numHiddenNodes = 128;    
+    static const int numHiddenNodes = 32;    
     float z[numHiddenNodes];
 
     //  number of output = 2
@@ -72,7 +72,7 @@ int  main(){
     // STEP 1============================================
     // While stopping condition is false, do Steps 2-9.
     bool step_1 = false;
-    int epoch = 0, max_epoch = 100000;
+    int epoch = 0, max_epoch = 5000;
 
     while (step_1 == false)
     {
@@ -85,7 +85,7 @@ int  main(){
         // Each input unit (Xi, i = 1, ... , n) receives
         // input signal Xi and broadcasts this signal to all
         // units in the layer above (the hidden units).
-        for (size_t pola = 0; pola < 20; pola++)
+        for (size_t pola = 0; pola < 10; pola++)
         {
             
             // STEP 4============================================
@@ -94,9 +94,9 @@ int  main(){
             {
                 // sums its weighted input signals,
                 float z_in = bias_v[j];
-                for (size_t i = 0; i < 1600; i++)
+                for (size_t i = 0; i < 1200; i++)
                 {
-                    z_in = z_in + (x[pola][i] * weight_v[i][j] );
+                    z_in = z_in + (data_training[pola][i] * weight_v[i][j] );
                 }
 
                 // applies its activation function to compute its output signal
@@ -139,7 +139,7 @@ int  main(){
             // training pattern, computes its error information term,
             float errorOutputs[numOutputs];
             for (int k=0; k<numOutputs; k++) {
-                float error = (target[array_of_target][k] - y[k]);
+                float error = (data_target[array_of_target][k] - y[k]);
                 errorOutputs[k] = error * dSigmoid(y[k]);
             }
 
@@ -178,9 +178,9 @@ int  main(){
             for (size_t j = 0; j < numHiddenNodes; j++)
             {
                 // calculates its weight correction term (used to update vij later)
-                for (size_t i = 0; i < 1600; i++)
+                for (size_t i = 0; i < 1200; i++)
                 {
-                    deltaWeightHiddenUnits[i][j] = learning_rate * errorHiddenUnits[j] * x[pola][i];
+                    deltaWeightHiddenUnits[i][j] = learning_rate * errorHiddenUnits[j] * data_training[pola][i];
                 }
                 
               
@@ -204,7 +204,7 @@ int  main(){
             // its bias and weights (i = 0, , n)
             for (size_t j = 0; j < numHiddenNodes; j++)
             {
-                for (size_t i = 0; i < 1600; i++)
+                for (size_t i = 0; i < 1200; i++)
                 {
                     weight_v[i][j] += deltaWeightHiddenUnits[i][j];
                 }
@@ -212,14 +212,15 @@ int  main(){
             }
             
             array_of_target++;
-            if (pola < 9)
+            if (pola <4 )
             {
                 array_of_target = 0;
             } 
-            if (pola > 9 && pola <= 19)
+            if (pola > 4 && pola <=9)
             {
                 array_of_target = 1;
             } 
+           
 
         }
         // STEP 9============================================
