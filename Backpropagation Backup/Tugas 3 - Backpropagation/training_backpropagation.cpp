@@ -2,39 +2,35 @@
 #include <list>
 #include <cstdlib>
 #include <math.h>
-#include <assert.h>
+
 
 // Eksternal file
-#include "data/data_training_2.txt"
+#include "data/data_training.txt"
 #include "data/data_target.txt"
 // function for sigmoid activation
 float sigmoid(float x) { return 1 / (1 + exp(-x)); }
 // function for sigmoid derivative
 float dSigmoid(float x) { return x * (1 - x); }
 
-
 // function untuk inisialisasi data random weight
 float init_weight() { return ((float)rand())/((float)RAND_MAX); }
 
 
-
-
-
 int  main(){
+    //static const char huruf[2] = {'C', 'R'};
 
-    static const char klasifikasi[2] = {'C', 'R'};
     //  number of input  = 63
-    static const int numInputs = 10 * 10;    
+    static const int numInputs = 1600;    
 
     //  number of hidden layer = 4
-    static const int numHiddenNodes = 4;    
+    static const int numHiddenNodes = 32;    
     float z[numHiddenNodes];
 
     //  number of output = 7
     static const int numOutputs = 2;
     float y[numOutputs];
 
-    static const float learning_rate = 0.8f;
+    static const float learning_rate = 0.1f;
 
     // STEP 0============================================
     // Initialize weights (Set to small random values).
@@ -75,7 +71,7 @@ int  main(){
     // STEP 1============================================
     // While stopping condition is false, do Steps 2-9.
     bool step_1 = false;
-    int epoch = 0, max_epoch = 10000;
+    int epoch = 0, max_epoch = 5000;
 
     while (step_1 == false)
     {
@@ -93,23 +89,19 @@ int  main(){
             
             // STEP 4============================================
             // Each hidden unit (Zj,j = 1, ... ,p) 
-            // printf("\n-----------------------");
             for (size_t j = 0; j < numHiddenNodes; j++)
             {
                 // sums its weighted input signals,
-                float z_in = 0;
-                z_in = z_in + bias_v[j];
-                for (size_t i = 0; i < numInputs; i++)
+                float z_in = bias_v[j];
+                for (size_t i = 0; i < 1600; i++)
                 {
                     z_in = z_in + (x[pola][i] * weight_v[i][j] );
                 }
 
                 // applies its activation function to compute its output signal
-                z_in = z_in;
                 z[j] = sigmoid(z_in);
 
             }
-            //  printf("\n-----------------------");
             
             // STEP 5============================================
             // Each output unit (Yk , k = 1, ... , m) sums its weighted input signals,
@@ -126,19 +118,17 @@ int  main(){
                 y[k] = sigmoid(y_in);
             }
 
-            if (epoch%1000 == 0 ){
-                // Log training
-                printf("\n========================\n\nPattern ke - %d (%c)\t \noutput: \n\t( ", pola+1, klasifikasi[array_of_target]);
-                for (size_t k = 0; k < numOutputs; k++)
-                {
-                    printf(" %f, ", y[k]);
-                }
-                printf(" )\n Expected Output: \n\t(");
-                for (size_t k = 0; k < numOutputs; k++)
-                {
-                    printf("      %f,  ", target[array_of_target][k]);
-                }
-            }
+            // Log training
+            // printf("\n========================\n\nPattern ke - %d (%c)\t \noutput: \n\t( ", pola+1, huruf[array_of_target]);
+            // for (size_t k = 0; k < 7; k++)
+            // {
+            //     printf(" %f, ", y[k]);
+            // }
+            // printf(" )\n Expected Output: \n\t(");
+            // for (size_t k = 0; k < 7; k++)
+            // {
+            //     printf("      %d,  ", target[array_of_target][k]);
+            // }
 
             // Backpropagation of error:
             
@@ -148,12 +138,9 @@ int  main(){
             // training pattern, computes its error information term,
             float errorOutputs[numOutputs];
             for (int k=0; k<numOutputs; k++) {
-                float error = target[array_of_target][k] - y[k];
-
+                float error = (target[array_of_target][k] - y[k]);
                 errorOutputs[k] = error * dSigmoid(y[k]);
-
             }
-
 
             // calculates its weight correction term (used to update Wjk later),
             float deltaWeightOutput[numHiddenNodes][numOutputs];
@@ -189,7 +176,7 @@ int  main(){
             for (size_t j = 0; j < numHiddenNodes; j++)
             {
                 // calculates its weight correction term (used to update vij later)
-                for (size_t i = 0; i < numInputs; i++)
+                for (size_t i = 0; i < 1600; i++)
                 {
                     deltaWeightHiddenUnits[i][j] = learning_rate * errorHiddenUnits[j] * x[pola][i];
                 }
@@ -214,30 +201,25 @@ int  main(){
             // its bias and weights (i = 0, , n)
             for (size_t j = 0; j < numHiddenNodes; j++)
             {
-                for (size_t i = 0; i < numInputs; i++)
+                for (size_t i = 0; i < 1600; i++)
                 {
                     weight_v[i][j] += deltaWeightHiddenUnits[i][j];
                 }
                 bias_v[j] += deltaBiasHiddenUnits[j];     
             }
             
-            // array_of_target++;
-            if (pola == 9)
+            array_of_target++;
+            if (pola == 9 || pola == 19)
             {
-                array_of_target = 1;
+                array_of_target = 0;
             }
-            // printf("\n\nArray of target %d", array_of_target);
-
 
         }
-        // return 0;
         // STEP 9============================================
         // Test stopping condition.
-        if (epoch % 100 == 0){
-            printf("\n\nTraining, Epoch %d", epoch);
-            printf("\n==================");
-        }
-        if (epoch >= max_epoch){
+        printf("\n\nTraining, Epoch %d", epoch);
+        printf("\n==================", epoch);
+        if (epoch == max_epoch){
             step_1 = true;
         }
         epoch++;
@@ -256,7 +238,7 @@ int  main(){
     fprintf(fp, "float sigmoid(float x) { return 1 / (1 + exp(-x)); }\n");
 
     fprintf(fp, "// function untuk aktivasi bipolar\n");
-    fprintf(fp, "int treshold(float x) { return (x < 0.5) ? 0 : 1.0;}\n\n");
+    fprintf(fp, "int reluCostum(float x) { return (x < 0.5) ? -1.0 : 1.0;}\n\n");
 
     fprintf(fp, "//  number of input  = %d\n", numInputs);
     fprintf(fp, "static const int numInputs = %d;  \n\n", numInputs);  
@@ -267,7 +249,7 @@ int  main(){
 
     fprintf(fp, "//  number of output = %d\n", numOutputs);
     fprintf(fp, "static const int numOutputs = %d;\n",  numOutputs);
-    fprintf(fp, "float y[numOutputs];\n\n"); 
+    fprintf(fp, "int y[numOutputs];\n\n"); 
 
     fprintf(fp, "static const float learning_rate = 0.1;\n\n");
 
@@ -282,7 +264,7 @@ int  main(){
         fprintf(fp, "\t{ ");
         for (size_t j = 0; j < numHiddenNodes; j++)
         {
-            fprintf(fp, "\t%15.10g,", weight_v[i][j]);
+            fprintf(fp, "\t%f,", weight_v[i][j]);
         }
         fprintf(fp, "\t},\n");
         
@@ -293,7 +275,7 @@ int  main(){
     fprintf(fp, "float bias_v[numHiddenNodes] = { ");
     for (size_t j = 0; j < numHiddenNodes; j++)
     {
-        fprintf(fp, "\t%15.10g,", bias_v[j]);
+        fprintf(fp, "\t%f,", bias_v[j]);
     }
     fprintf(fp, "\t};\n\n");
 
@@ -306,7 +288,7 @@ int  main(){
         fprintf(fp, "\t{ ");
         for (size_t k = 0; k < numOutputs; k++)
         {
-            fprintf(fp, "\t%15.10g,", weight_w[j][k]);
+            fprintf(fp, "\t%f,", weight_w[j][k]);
         }
         
         fprintf(fp, "\t},\n");
@@ -317,7 +299,7 @@ int  main(){
     fprintf(fp, "float bias_w[numOutputs] = { ");
     for (size_t k = 0; k < numOutputs; k++)
     {
-        fprintf(fp, "\t%15.10g,", bias_w[k]);
+        fprintf(fp, "\t%f,", bias_w[k]);
     }
     fprintf(fp, "\t};\n\n");
     
