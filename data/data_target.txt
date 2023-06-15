@@ -5,9 +5,3 @@ double target[2][2] = {
     {0, 1,},
 };
 
-// int target[40][2] = {
-//     // TARGET 1, GAMBAR KUCING
-//     { 1, -1,},
-//     // TARGET 2 GAMBAR KELINCI
-//     {-1, 1,},
-// };

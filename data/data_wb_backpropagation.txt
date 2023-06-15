@@ -124,7 +124,7 @@ float weight_v[numInputs][numHiddenNodes] =
 };
 
 // bias hidden 
-float bias_v[numHiddenNodes] = { 	   0.3857694268,	   0.6268613935,	5.310982309e+31,	   0.7093198299,	};
+float bias_v[numHiddenNodes] = { 	   0.3857694268,	   0.6268613935,	9.879541416e+33,	   0.7093198299,	};
 
 // weight output 
 float weight_w[numHiddenNodes][numOutputs] = 
