@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 // Eksternal file
-#include "data/data_training_2.txt"
+#include "data/data_testing.txt"
 #include "data/data_wb_backpropagation.txt"
 
 
